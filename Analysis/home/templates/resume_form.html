@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume-Form</title>
+    <style>
+    body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  margin: 0;
+  padding: 20px;
+}
+
+.resume-form {
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  max-width: 750px;
+  margin: auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 8px;
+  color: #444;
+}
+
+textarea {
+  width: 100%;
+  height: 400px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  resize: vertical;
+  font-family: monospace;
+  font-size: 14px;
+  background: #fafafa;
+  transition: border-color 0.3s ease;
+}
+
+textarea:focus {
+  border-color: #0073e6;
+  outline: none;
+  background: #fff;
+}
+
+button {
+  margin-top: 20px;
+  padding: 12px 25px;
+  background: #0073e6;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #005bb5;
+}
+
+.result-section {
+  margin-top: 25px;
+  padding: 15px;
+  background: #f9f9f9;
+  border-left: 4px solid #0073e6;
+  border-radius: 6px;
+}
+
+.result-section h3 {
+  margin: 0 0 10px 0;
+  color: #0073e6;
+}
+
+.result-section p {
+  margin: 5px 0;
+  color: #555;
+}
+
+    </style>
+</head>
+<body>
+  <div class="resume-form">
+    <h2>Paste Your Resume</h2>
+    <form method='POST'action=''>
+        {% csrf_token %}
+      <label for="resume">Resume Content:</label>
+      <textarea id="resume" name="resume" placeholder="Paste your resume text here..."></textarea>
+      <button type="submit">Analyze Resume</button>
+      Ats:Score {{result }}%
+    Missing Keywords:
+      {% for keyword in missing_keywords %}
+      <p>{{keyword}}</p>
+      {% endfor %}
+    </form>
+  </div>
+</body>
+
+
+
