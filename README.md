@@ -23,7 +23,7 @@ A Django web application that analyzes resumes for ATS (Applicant Tracking Syste
 Python, HTML, CSS, SQL, Django, Pandas, C, C++, OOP, Assembly
 
 ## Author
-Laiba Ashar — CS Student | Learning Django & Python
+Laiba Ashar — IT Student | Learning Django & Python
 GitHub: https://github.com/laibaashar642-pixel
 ## Future Improvements
 - Add PDF resume upload support
