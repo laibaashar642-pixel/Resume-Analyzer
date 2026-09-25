@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CareerMatch AI — Analysis Result</title>
+
+    {% load static %}
+    <link rel="stylesheet"
+          href="{% static 'home/css/style.css' %}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <div class="result-header">
+        <p class="eyebrow">AI RESUME ANALYSIS</p>
+
+        <h1>CareerMatch AI</h1>
+
+        <p>
+            Here's how your resume aligns with the job description.
+        </p>
+    </div>
+
+
+    <!-- Overall Score -->
+    <section class="score-card">
+
+        <p class="section-label">OVERALL MATCH</p>
+
+        <div class="score">
+            {{ match_data.score }}%
+        </div>
+
+        <div class="score-breakdown">
+
+            <div>
+                <span>Skill Match</span>
+                <strong>
+                    {{ match_data.skill_score }}%
+                </strong>
+            </div>
+
+            <div>
+                <span>Semantic Relevance</span>
+                <strong>
+                    {{ match_data.semantic_score }}%
+                </strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Matched Skills -->
+    <section class="card">
+
+        <div class="card-heading">
+            <div>
+                <p class="section-label">STRENGTHS</p>
+                <h2>Matched Skills</h2>
+            </div>
+
+            <span class="count-badge">
+                {{ match_data.matched_skills|length }}
+            </span>
+        </div>
+
+        {% if match_data.matched_skills %}
+
+            <div class="skills">
+
+                {% for skill in match_data.matched_skills %}
+
+                    <span class="skill matched">
+                        ✓ {{ skill }}
+                    </span>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <p class="empty-state">
+                No matching skills were detected.
+            </p>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- Missing Skills -->
+    <section class="card">
+
+        <div class="card-heading">
+            <div>
+                <p class="section-label">SKILL GAPS</p>
+                <h2>Missing Skills</h2>
+            </div>
+
+            <span class="count-badge">
+                {{ match_data.missing_skills|length }}
+            </span>
+        </div>
+
+        {% if match_data.missing_skills %}
+
+            <div class="skills">
+
+                {% for skill in match_data.missing_skills %}
+
+                    <span class="skill missing">
+                        + {{ skill }}
+                    </span>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <p class="success-state">
+                Great! No missing skills were detected.
+            </p>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- Resume Evidence -->
+    <section class="card">
+
+        <div class="card-heading">
+            <div>
+                <p class="section-label">EXPLAINABLE AI</p>
+                <h2>Resume Evidence</h2>
+            </div>
+        </div>
+
+        {% if match_data.evidence %}
+
+            <div class="evidence-list">
+
+                {% for item in match_data.evidence %}
+
+                    <div class="evidence-item">
+
+                        <div class="evidence-skill">
+                            {{ item.skill }}
+                        </div>
+
+                        <p>
+                            "{{ item.evidence }}"
+                        </p>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <p class="empty-state">
+                No supporting evidence was detected.
+            </p>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- Resume Overview -->
+    <section class="card">
+
+        <p class="section-label">RESUME OVERVIEW</p>
+
+        <h2>Candidate Information</h2>
+
+        <div class="overview-grid">
+
+            <div class="overview-item">
+                <span>Email</span>
+                <strong>
+                    {{ resume_data.email|default:"Not detected" }}
+                </strong>
+            </div>
+
+            <div class="overview-item">
+                <span>Phone</span>
+                <strong>
+                    {{ resume_data.phone|default:"Not detected" }}
+                </strong>
+            </div>
+
+            <div class="overview-item">
+                <span>Skills Detected</span>
+                <strong>
+                    {{ resume_data.skill_count }}
+                </strong>
+            </div>
+
+            <div class="overview-item">
+                <span>Resume Words</span>
+                <strong>
+                    {{ resume_data.word_count }}
+                </strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Recommendations -->
+    <section class="card">
+
+        <p class="section-label">NEXT STEPS</p>
+
+        <h2>Recommendations</h2>
+
+        <ul class="recommendation-list">
+
+            {% for recommendation in recommendations %}
+
+                <li>
+                    {{ recommendation }}
+                </li>
+
+            {% endfor %}
+
+        </ul>
+
+    </section>
+
+
+    <!-- Interview Questions -->
+    <section class="card">
+
+        <p class="section-label">INTERVIEW PREPARATION</p>
+
+        <h2>Potential Interview Questions</h2>
+
+        <div class="question-list">
+
+            {% for question in interview_questions %}
+
+                <div class="question-item">
+
+                    <span class="question-number">
+                        {{ forloop.counter }}
+                    </span>
+
+                    <p>
+                        {{ question }}
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+    <!-- Back -->
+    <div class="actions">
+
+        <a href="{% url 'resume_analysis' %}"
+           class="back-button">
+            ← Analyze Another Resume
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

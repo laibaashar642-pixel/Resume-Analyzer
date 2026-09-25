@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CareerMatch AI</title>
+
+    {% load static %}
+
+    <link
+        rel="stylesheet"
+        href="{% static 'home/css/style.css' %}"
+    >
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="hero">
+
+        <h1>CareerMatch AI</h1>
+
+        <p>
+            Analyze your resume against a job description
+            and discover your skill gaps.
+        </p>
+
+    </div>
+
+
+    <form
+        method="POST"
+        enctype="multipart/form-data"
+        class="analysis-card"
+    >
+
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="error">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+
+        <div class="field">
+
+            <label>
+                Upload Resume
+            </label>
+
+            {{ form.resume }}
+
+            {% for error in form.resume.errors %}
+                <p class="error">
+                    {{ error }}
+                </p>
+            {% endfor %}
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Job Description
+            </label>
+
+            {{ form.job_description }}
+
+            {% for error in form.job_description.errors %}
+                <p class="error">
+                    {{ error }}
+                </p>
+            {% endfor %}
+
+        </div>
+
+
+        <button type="submit">
+            Analyze Resume
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+</html>
