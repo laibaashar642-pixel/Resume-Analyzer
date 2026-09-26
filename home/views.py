@@ -1,13 +1,26 @@
 from django.shortcuts import render
 
 from .forms import ResumeAnalysisForm
-from .services.pdf_parser import extract_text_from_pdf
-from .services.resume_analyzer import analyze_resume
-from .services.jd_analyzer import analyze_job_description
+
+from .services.pdf_parser import (
+    extract_text_from_pdf,
+)
+
+from .services.resume_analyzer import (
+    analyze_resume,
+    generate_resume_audit,
+)
+
+from .services.jd_analyzer import (
+    analyze_job_description,
+)
+
 from .services.matcher import (
     calculate_match,
     generate_recommendations,
+    generate_match_explanation,
 )
+
 from .services.interview_generator import (
     generate_interview_questions,
 )
@@ -26,32 +39,36 @@ def resume_analysis(request):
 
             try:
 
+                # 1. Get uploaded resume
                 resume_file = form.cleaned_data[
                     "resume"
                 ]
 
-                job_description = (
-                    form.cleaned_data[
-                        "job_description"
-                    ]
-                )
+                job_description = form.cleaned_data[
+                    "job_description"
+                ]
 
-                # 1. Extract PDF text
+                # 2. Extract PDF text
                 resume_text = extract_text_from_pdf(
                     resume_file
                 )
 
-                # 2. Resume analysis
+                # 3. Analyze resume
                 resume_data = analyze_resume(
                     resume_text
                 )
 
-                # 3. JD analysis
+                # 4. Resume quality audit
+                resume_audit = generate_resume_audit(
+                    resume_text
+                )
+
+                # 5. Analyze job description
                 jd_data = analyze_job_description(
                     job_description
                 )
 
-                # 4. Semantic + skill matching
+                # 6. Calculate skill + semantic match
                 match_data = calculate_match(
                     resume_data,
                     jd_data,
@@ -59,14 +76,21 @@ def resume_analysis(request):
                     job_description,
                 )
 
-                # 5. Recommendations
+                # 7. Explain why the score was generated
+                match_explanation = (
+                    generate_match_explanation(
+                        match_data
+                    )
+                )
+
+                # 8. Generate recommendations
                 recommendations = (
                     generate_recommendations(
                         match_data
                     )
                 )
 
-                # 6. Interview questions
+                # 9. Generate interview questions
                 interview_questions = (
                     generate_interview_questions(
                         resume_data,
@@ -75,11 +99,18 @@ def resume_analysis(request):
                     )
                 )
 
+                # 10. Send everything to result page
                 context = {
                     "resume_data": resume_data,
+                    "resume_audit": resume_audit,
                     "jd_data": jd_data,
                     "match_data": match_data,
-                    "recommendations": recommendations,
+                    "match_explanation": (
+                        match_explanation
+                    ),
+                    "recommendations": (
+                        recommendations
+                    ),
                     "interview_questions": (
                         interview_questions
                     ),
@@ -104,6 +135,7 @@ def resume_analysis(request):
             {"form": form},
         )
 
+    # GET request
     form = ResumeAnalysisForm()
 
     return render(
