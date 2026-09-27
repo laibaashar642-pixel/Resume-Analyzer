@@ -1,36 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>CareerMatch AI — Analysis Result</title>
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        CareerMatch AI — Analysis Result
+    </title>
 
     {% load static %}
-    <link rel="stylesheet"
-          href="{% static 'home/css/style.css' %}">
+
+    <link
+        rel="stylesheet"
+        href="{% static 'home/css/style.css' %}"
+    >
+
 </head>
+
 
 <body>
 
 <div class="container">
 
-    <!-- Header -->
-    <div class="result-header">
-        <p class="eyebrow">AI RESUME ANALYSIS</p>
 
-        <h1>CareerMatch AI</h1>
+    <!-- HEADER -->
+
+    <div class="result-header">
+
+        <p class="eyebrow">
+            AI RESUME ANALYSIS
+        </p>
+
+        <h1>
+            CareerMatch AI
+        </h1>
 
         <p>
-            Here's how your resume aligns with the job description.
+            Here's how your resume aligns with
+            the job description.
         </p>
+
     </div>
 
 
-    <!-- Overall Score -->
+    <!-- OVERALL SCORE -->
+
     <section class="score-card">
 
-        <p class="section-label">OVERALL MATCH</p>
+        <p class="section-label">
+            OVERALL MATCH
+        </p>
 
         <div class="score">
             {{ match_data.score }}%
@@ -39,17 +64,28 @@
         <div class="score-breakdown">
 
             <div>
-                <span>Skill Match</span>
+
+                <span>
+                    Skill Match
+                </span>
+
                 <strong>
                     {{ match_data.skill_score }}%
                 </strong>
+
             </div>
 
+
             <div>
-                <span>Semantic Relevance</span>
+
+                <span>
+                    Semantic Relevance
+                </span>
+
                 <strong>
                     {{ match_data.semantic_score }}%
                 </strong>
+
             </div>
 
         </div>
@@ -57,19 +93,126 @@
     </section>
 
 
-    <!-- Matched Skills -->
+    <!-- WHY THIS SCORE -->
+
+    <section class="card">
+
+        <p class="section-label">
+            WHY THIS SCORE?
+        </p>
+
+        <h2>
+            Match Explanation
+        </h2>
+
+        <div class="explanation-list">
+
+            {% for explanation in match_explanation %}
+
+                <div class="explanation-item">
+
+                    <span class="explanation-icon">
+                        ✓
+                    </span>
+
+                    <p>
+                        {{ explanation }}
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+    <!-- RESUME AUDIT -->
+
+    <section class="card">
+
+        <p class="section-label">
+            RESUME QUALITY
+        </p>
+
+        <h2>
+            Resume Audit
+        </h2>
+
+        <p class="card-description">
+            A quick structural check of your resume
+            based on commonly used resume sections.
+        </p>
+
+
+        <div class="audit-list">
+
+            {% for item in resume_audit %}
+
+                <div class="audit-item">
+
+                    <div class="audit-content">
+
+                        <strong>
+                            {{ item.section }}
+                        </strong>
+
+                        <p>
+                            {{ item.message }}
+                        </p>
+
+                    </div>
+
+
+                    {% if item.status == "Present" %}
+
+                        <span class="audit-present">
+                            ✓ Present
+                        </span>
+
+                    {% else %}
+
+                        <span class="audit-missing">
+                            ! Missing
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+    <!-- MATCHED SKILLS -->
+
     <section class="card">
 
         <div class="card-heading">
+
             <div>
-                <p class="section-label">STRENGTHS</p>
-                <h2>Matched Skills</h2>
+
+                <p class="section-label">
+                    STRENGTHS
+                </p>
+
+                <h2>
+                    Matched Skills
+                </h2>
+
             </div>
+
 
             <span class="count-badge">
                 {{ match_data.matched_skills|length }}
             </span>
+
         </div>
+
 
         {% if match_data.matched_skills %}
 
@@ -96,19 +239,31 @@
     </section>
 
 
-    <!-- Missing Skills -->
+    <!-- MISSING SKILLS -->
+
     <section class="card">
 
         <div class="card-heading">
+
             <div>
-                <p class="section-label">SKILL GAPS</p>
-                <h2>Missing Skills</h2>
+
+                <p class="section-label">
+                    SKILL GAPS
+                </p>
+
+                <h2>
+                    Missing Skills
+                </h2>
+
             </div>
+
 
             <span class="count-badge">
                 {{ match_data.missing_skills|length }}
             </span>
+
         </div>
+
 
         {% if match_data.missing_skills %}
 
@@ -135,15 +290,26 @@
     </section>
 
 
-    <!-- Resume Evidence -->
+    <!-- RESUME EVIDENCE -->
+
     <section class="card">
 
         <div class="card-heading">
+
             <div>
-                <p class="section-label">EXPLAINABLE AI</p>
-                <h2>Resume Evidence</h2>
+
+                <p class="section-label">
+                    EXPLAINABLE AI
+                </p>
+
+                <h2>
+                    Resume Evidence
+                </h2>
+
             </div>
+
         </div>
+
 
         {% if match_data.evidence %}
 
@@ -178,41 +344,70 @@
     </section>
 
 
-    <!-- Resume Overview -->
+    <!-- CANDIDATE INFORMATION -->
+
     <section class="card">
 
-        <p class="section-label">RESUME OVERVIEW</p>
+        <p class="section-label">
+            RESUME OVERVIEW
+        </p>
 
-        <h2>Candidate Information</h2>
+        <h2>
+            Candidate Information
+        </h2>
+
 
         <div class="overview-grid">
 
             <div class="overview-item">
-                <span>Email</span>
+
+                <span>
+                    Email
+                </span>
+
                 <strong>
                     {{ resume_data.email|default:"Not detected" }}
                 </strong>
+
             </div>
 
+
             <div class="overview-item">
-                <span>Phone</span>
+
+                <span>
+                    Phone
+                </span>
+
                 <strong>
                     {{ resume_data.phone|default:"Not detected" }}
                 </strong>
+
             </div>
 
+
             <div class="overview-item">
-                <span>Skills Detected</span>
+
+                <span>
+                    Skills Detected
+                </span>
+
                 <strong>
                     {{ resume_data.skill_count }}
                 </strong>
+
             </div>
 
+
             <div class="overview-item">
-                <span>Resume Words</span>
+
+                <span>
+                    Resume Words
+                </span>
+
                 <strong>
                     {{ resume_data.word_count }}
                 </strong>
+
             </div>
 
         </div>
@@ -220,12 +415,18 @@
     </section>
 
 
-    <!-- Recommendations -->
+    <!-- RECOMMENDATIONS -->
+
     <section class="card">
 
-        <p class="section-label">NEXT STEPS</p>
+        <p class="section-label">
+            NEXT STEPS
+        </p>
 
-        <h2>Recommendations</h2>
+        <h2>
+            Recommendations
+        </h2>
+
 
         <ul class="recommendation-list">
 
@@ -242,16 +443,27 @@
     </section>
 
 
-    <!-- Interview Questions -->
+    <!-- INTERVIEW PREPARATION -->
+
     <section class="card">
 
-        <p class="section-label">INTERVIEW PREPARATION</p>
+        <p class="section-label">
+            INTERVIEW PREPARATION
+        </p>
 
-        <h2>Potential Interview Questions</h2>
+        <h2>
+            Smart Interview Prep
+        </h2>
+
+        <p class="card-description">
+            Questions are generated from your matched skills,
+            skill gaps, and the requirements of this job.
+        </p>
+
 
         <div class="question-list">
 
-            {% for question in interview_questions %}
+            {% for item in interview_questions %}
 
                 <div class="question-item">
 
@@ -259,9 +471,40 @@
                         {{ forloop.counter }}
                     </span>
 
-                    <p>
-                        {{ question }}
-                    </p>
+
+                    <div class="question-content">
+
+                        <h3>
+                            {{ item.question }}
+                        </h3>
+
+
+                        <div class="interview-detail">
+
+                            <strong>
+                                Why you're being asked
+                            </strong>
+
+                            <p>
+                                {{ item.why }}
+                            </p>
+
+                        </div>
+
+
+                        <div class="interview-detail">
+
+                            <strong>
+                                What to prepare
+                            </strong>
+
+                            <p>
+                                {{ item.prepare }}
+                            </p>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
@@ -272,17 +515,22 @@
     </section>
 
 
-    <!-- Back -->
+    <!-- ACTION -->
+
     <div class="actions">
 
-        <a href="{% url 'resume_analysis' %}"
-           class="back-button">
+        <a
+            href="{% url 'resume_analysis' %}"
+            class="back-button"
+        >
             ← Analyze Another Resume
         </a>
 
     </div>
 
+
 </div>
 
 </body>
+
 </html>

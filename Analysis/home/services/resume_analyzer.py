@@ -95,3 +95,83 @@ def analyze_resume(resume_text):
         "text_length": len(resume_text),
         "word_count": len(resume_text.split()),
     }
+def detect_resume_sections(text):
+    normalized = text.lower()
+
+    section_keywords = {
+        "summary": [
+            "summary",
+            "professional summary",
+            "profile",
+            "objective",
+        ],
+        "skills": [
+            "skills",
+            "technical skills",
+            "core skills",
+        ],
+        "experience": [
+            "experience",
+            "work experience",
+            "employment",
+        ],
+        "projects": [
+            "projects",
+            "personal projects",
+            "academic projects",
+        ],
+        "education": [
+            "education",
+            "academic background",
+            "qualifications",
+        ],
+        "certifications": [
+            "certifications",
+            "certificates",
+        ],
+    }
+
+    detected = {}
+
+    for section, keywords in section_keywords.items():
+        detected[section] = any(
+            keyword in normalized
+            for keyword in keywords
+        )
+
+    return detected
+
+
+def generate_resume_audit(resume_text):
+    sections = detect_resume_sections(resume_text)
+
+    audit = []
+
+    important_sections = [
+        "summary",
+        "skills",
+        "experience",
+        "projects",
+        "education",
+    ]
+
+    for section in important_sections:
+        if sections.get(section):
+            audit.append({
+                "section": section.title(),
+                "status": "Present",
+                "message": (
+                    f"{section.title()} section detected."
+                ),
+            })
+        else:
+            audit.append({
+                "section": section.title(),
+                "status": "Missing",
+                "message": (
+                    f"Consider adding a {section.title()} "
+                    "section if it is relevant to your profile."
+                ),
+            })
+
+    return audit

@@ -17,43 +17,109 @@ def generate_interview_questions(
     )
 
     # Questions based on matched skills
-    for skill in matched[:5]:
+    for skill in matched[:4]:
 
-        questions.append(
-            f"Can you explain your practical experience "
-            f"with {skill} and describe a project where "
-            f"you used it?"
-        )
+        questions.append({
+            "question": (
+                f"Can you explain your practical "
+                f"experience with {skill} and describe "
+                f"a project where you used it?"
+            ),
+            "why": (
+                f"{skill} was detected as a skill that "
+                "matches this job requirement."
+            ),
+            "prepare": (
+                f"Prepare one real project example "
+                f"where you used {skill}, including "
+                "what you built and your contribution."
+            ),
+        })
 
     # Questions based on missing skills
-    for skill in missing[:4]:
+    for skill in missing[:3]:
 
-        questions.append(
-            f"What do you know about {skill}, and how "
-            f"would you apply it in this role?"
-        )
+        questions.append({
+            "question": (
+                f"What do you know about {skill}, "
+                "and how would you apply it in this role?"
+            ),
+            "why": (
+                f"{skill} appears in the job description "
+                "but was not detected in your resume."
+            ),
+            "prepare": (
+                f"Review the fundamentals of {skill} "
+                "and understand its common use cases."
+            ),
+        })
 
-    # Role-specific questions
-    questions.extend([
-        "Walk me through your most relevant project "
-        "for this position.",
+    # General backend question
+    questions.append({
+        "question": (
+            "How would you design a REST API for "
+            "an AI-powered application?"
+        ),
+        "why": (
+            "The role involves backend development "
+            "and REST API design."
+        ),
+        "prepare": (
+            "Review API endpoints, HTTP methods, "
+            "status codes, authentication, validation, "
+            "and Django REST Framework or FastAPI."
+        ),
+    })
 
-        "How would you design a REST API for an "
-        "AI-powered application?",
+    # Debugging question
+    questions.append({
+        "question": (
+            "How do you debug a backend application "
+            "when an API returns unexpected results?"
+        ),
+        "why": (
+            "Backend developers are expected to "
+            "identify and resolve API problems."
+        ),
+        "prepare": (
+            "Review logging, request/response inspection, "
+            "validation, database queries, exceptions, "
+            "and debugging techniques."
+        ),
+    })
 
-        "How do you debug a backend application when "
-        "an API is returning unexpected results?",
+    # Project question
+    questions.append({
+        "question": (
+            "Walk me through your most relevant project "
+            "for this position."
+        ),
+        "why": (
+            "Interviewers commonly use projects to "
+            "evaluate practical experience."
+        ),
+        "prepare": (
+            "Prepare a clear explanation of the project "
+            "problem, architecture, technologies, "
+            "your contribution, and outcome."
+        ),
+    })
 
-        "How would you improve the scalability and "
-        "maintainability of a Python backend?",
-    ])
+    # Scalability question
+    questions.append({
+        "question": (
+            "How would you improve the scalability "
+            "and maintainability of a Python backend?"
+        ),
+        "why": (
+            "The role requires building maintainable "
+            "and scalable backend applications."
+        ),
+        "prepare": (
+            "Review modular architecture, database "
+            "optimization, caching, asynchronous "
+            "processing, API design, and clean code."
+        ),
+    })
 
-    # Remove duplicates while preserving order
-    unique_questions = []
-
-    for question in questions:
-
-        if question not in unique_questions:
-            unique_questions.append(question)
-
-    return unique_questions[:10]
+    return questions[:10]

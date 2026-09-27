@@ -6,6 +6,7 @@ model = SentenceTransformer("all-MiniLM-L6-v2")
 
 
 def calculate_semantic_similarity(resume_text, jd_text):
+
     resume_embedding = model.encode(
         [resume_text],
         normalize_embeddings=True,
@@ -101,6 +102,7 @@ def calculate_match(
             jd_text,
         )
 
+    # Overall score
     final_score = round(
         (skill_score * 0.60)
         + (semantic_score * 0.40)
@@ -118,8 +120,10 @@ def calculate_match(
 
         evidence.append({
             "skill": skill,
-            "evidence": evidence_text
-            or "Skill detected in resume.",
+            "evidence": (
+                evidence_text
+                or "Skill detected in resume."
+            ),
         })
 
     return {
@@ -139,6 +143,98 @@ def calculate_match(
     }
 
 
+def generate_match_explanation(match_data):
+
+    skill_score = match_data.get(
+        "skill_score",
+        0
+    )
+
+    semantic_score = match_data.get(
+        "semantic_score",
+        0
+    )
+
+    matched = match_data.get(
+        "matched_skills",
+        []
+    )
+
+    missing = match_data.get(
+        "missing_skills",
+        []
+    )
+
+    explanations = []
+
+    # Technical alignment
+    if skill_score >= 80:
+
+        explanations.append(
+            f"Strong technical alignment: "
+            f"{len(matched)} required skill(s) "
+            "were found in the resume."
+        )
+
+    elif skill_score >= 50:
+
+        explanations.append(
+            f"Moderate technical alignment: "
+            f"{len(matched)} required skill(s) matched, "
+            "while some required skills are missing."
+        )
+
+    else:
+
+        explanations.append(
+            f"Low technical alignment: only "
+            f"{len(matched)} required skill(s) "
+            "matched the job requirements."
+        )
+
+    # Semantic alignment
+    if semantic_score >= 75:
+
+        explanations.append(
+            "The overall language and content of "
+            "the resume are strongly related to "
+            "the job description."
+        )
+
+    elif semantic_score >= 50:
+
+        explanations.append(
+            "The resume has moderate semantic "
+            "relevance to the responsibilities "
+            "described in the job."
+        )
+
+    else:
+
+        explanations.append(
+            "The resume content has limited "
+            "semantic similarity to the job description."
+        )
+
+    # Skill gaps
+    if missing:
+
+        explanations.append(
+            "The main gaps detected are: "
+            + ", ".join(missing[:5])
+            + "."
+        )
+
+    else:
+
+        explanations.append(
+            "No missing required skills were "
+            "detected from the configured skill list."
+        )
+
+    return explanations
+
+
 def generate_recommendations(match_data):
 
     recommendations = []
@@ -156,8 +252,8 @@ def generate_recommendations(match_data):
     if missing:
 
         recommendations.append(
-            "Strengthen the missing technical skills "
-            "identified from the job description."
+            "Strengthen the missing technical "
+            "skills identified from the job description."
         )
 
         for skill in missing[:5]:
@@ -178,8 +274,8 @@ def generate_recommendations(match_data):
     elif semantic_score >= 75:
 
         recommendations.append(
-            "Your resume has strong semantic relevance "
-            "to this job description."
+            "Your resume has strong semantic "
+            "relevance to this job description."
         )
 
     if not recommendations:
