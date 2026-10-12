@@ -121,6 +121,12 @@ Open `http://127.0.0.1:8000/`.
 **MVP Complete**
 
 The current version supports resume analysis, job matching, semantic similarity, explainable scoring, resume auditing, recommendations, and interview preparation.
+## Run with Docker
+
+docker build -t resume-analyzer .
+docker run -p 8000:8000 resume-analyzer
+
+Open http://localhost:8000
 
 ## Author
 
