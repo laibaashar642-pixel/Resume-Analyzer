@@ -54,13 +54,34 @@ def normalize_text(text):
     ).strip()
 
 
+def skill_pattern(skill):
+    """
+    Whole-word pattern for a skill, so that short skills like "c" or
+    "java" do not match inside other words ("Lahore", "JavaScript", "GitHub").
+    """
+    if skill == "rest api":
+        body = r"rest apis?"
+    elif skill == "llm":
+        body = r"llms?"
+    else:
+        body = re.escape(skill)
+
+    return re.compile(
+        r"(?<![a-z0-9+#.])" + body + r"(?![a-z0-9+#])"
+    )
+
+
 def find_skills(text):
     normalized = normalize_text(text)
 
     found = []
 
     for skill in SKILLS:
-        if skill.lower() in normalized:
+        if skill == "rest apis":
+            # covered by the "rest api" pattern
+            continue
+
+        if skill_pattern(skill).search(normalized):
             found.append(skill)
 
     return sorted(set(found))

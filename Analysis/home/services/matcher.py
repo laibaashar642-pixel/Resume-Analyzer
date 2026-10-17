@@ -1,6 +1,8 @@
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 
+from .resume_analyzer import skill_pattern
+
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
@@ -29,25 +31,14 @@ def calculate_semantic_similarity(resume_text, jd_text):
 
 def find_skill_evidence(skill, resume_text):
     """
-    Find the sentence/line from the resume
-    where the skill appears.
+    Find the line from the resume where the skill appears
+    (whole-word match, so "c" does not match "Lahore").
     """
 
-    lines = resume_text.splitlines()
+    pattern = skill_pattern(skill.lower())
 
-    skill_lower = skill.lower()
-
-    for line in lines:
-        if skill_lower in line.lower():
-            return line.strip()
-
-    # Try word-based matching for things like REST API
-    normalized_skill = skill_lower.replace("-", " ")
-
-    for line in lines:
-        normalized_line = line.lower().replace("-", " ")
-
-        if normalized_skill in normalized_line:
+    for line in resume_text.splitlines():
+        if pattern.search(line.lower().replace("-", " ")):
             return line.strip()
 
     return None
